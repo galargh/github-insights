@@ -29,7 +29,7 @@ exports.handler = async (event) => {
     }
     const response = await fetch(`https://github.com/${org}/${repo}/${cat}/${opt}`)
     const body = await response.text()
-    const packageIdList = [...body.matchAll(/"\/ipfs\/kubo\/network\/dependents\?package_id=(.+?)"/sg)]
+    const packageIdList = [...body.matchAll(new RegExp(`"/${org}/${repo}/network/dependents\\?package_id=(.+?)"`, 'g'))]
     const packageNameList = [...body.matchAll(/<span class="select-menu-item-text">(.+?)<\/span>/sg)]
     const packageList = await Promise.all(packageIdList.map(async ([_, id], i) => {
         const name = packageNameList[i][1].trim()
