@@ -1,0 +1,17 @@
+{
+  "name": "github-insights",
+  "version": "1.0.0",
+  "description": "Lambda function to get dependency insights from GitHub",
+  "main": "index.js",
+  "scripts": {
+    "package": "rm -rf function.zip && zip -r function.zip index.js node_modules",
+    "test": "time node test.js",
+    "update": "aws lambda update-function-code --function-name $AWS_FUNCTION_NAME --zip-file fileb://function.zip",
+    "deploy": "npm run package && npm run update"
+  },
+  "author": "galargh",
+  "license": "MIT",
+  "dependencies": {
+    "node-fetch": "^3.2.10"
+  }
+}
