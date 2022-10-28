@@ -2,7 +2,7 @@ const index = require('./index.js')
 
 const test = async () => {
   const result = await index.handler({
-      rawPath: '/testground/testground/network/dependents',
+      rawPath: '/filecoin-project/bacalhau/network/dependents',
   })
   console.log(result)
 }

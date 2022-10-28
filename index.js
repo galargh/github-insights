@@ -31,19 +31,31 @@ exports.handler = async (event) => {
     const body = await response.text()
     const packageIdList = [...body.matchAll(new RegExp(`"/${org}/${repo}/network/dependents\\?package_id=(.+?)"`, 'g'))]
     const packageNameList = [...body.matchAll(/<span class="select-menu-item-text">(.+?)<\/span>/sg)]
-    const packageList = await Promise.all(packageIdList.map(async ([_, id], i) => {
-        const name = packageNameList[i][1].trim()
-        const response = await fetch(`https://github.com/${org}/${repo}/${cat}/${opt}?package_id=${id}`)
-        const body = await response.text()
-        const repositories = body.match(/([\d,]+)\s+Repositories/s)[1].replace(',', '')
-        const packages = body.match(/([\d,]+)\s+Packages/s)[1].replace(',', '')
-        return {
-            name,
-            id,
-            repositories,
-            packages
-        }
-    }))
+    const packageList = []
+    if (packageIdList.length === 0) {
+      const name = `github.com/${org}/${repo}`
+      const repositories = body.match(/([\d,]+)\s+Repositories/s)[1].replace(',', '')
+      const packages = body.match(/([\d,]+)\s+Packages/s)[1].replace(',', '')
+      packageList.push({
+        name,
+        repositories,
+        packages
+      })
+    } else {
+      packageList.push(...(await Promise.all(packageIdList.map(async ([_, id], i) => {
+          const name = packageNameList[i][1].trim()
+          const response = await fetch(`https://github.com/${org}/${repo}/${cat}/${opt}?package_id=${id}`)
+          const body = await response.text()
+          const repositories = body.match(/([\d,]+)\s+Repositories/s)[1].replace(',', '')
+          const packages = body.match(/([\d,]+)\s+Packages/s)[1].replace(',', '')
+          return {
+              name,
+              id,
+              repositories,
+              packages
+          }
+      }))))
+    }
     return {
       statusCode: 200,
       body: JSON.stringify({
