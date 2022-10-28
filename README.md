@@ -28,10 +28,10 @@ Returns the numbers of repositories and packages that depend on each package in 
 ### Deploying to AWS Lambda
 
 1. Create a new AWS Lambda function
-  - Runtime: `Node.js 16.x`
-  - Architecture: `x86_64`
-  - Memory: `1024 MB`
-  - Timeout: `3 sec`
-  - Enable function URL: `true`
+    - Runtime: `Node.js 16.x`
+    - Architecture: `x86_64`
+    - Memory: `1024 MB`
+    - Timeout: `3 sec`
+    - Enable function URL: `true`
 1. Deploy the function
-  - Run: `npm run deploy`
+    - Run: `npm run deploy`
